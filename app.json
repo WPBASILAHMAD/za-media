@@ -22,6 +22,12 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "4cb9f335-15fe-4fe2-892d-ae25a3bdb50d"
+      }
+    },
+    "owner": "nmedia"
   }
 }
