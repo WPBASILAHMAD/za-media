@@ -1,0 +1,5 @@
+{
+  "api_url": "https://a9yd2tumde.execute-api.us-east-1.amazonaws.com/dev",
+  "assets_url": "https://d3i71cqwjisi3l.cloudfront.net",
+  "default_role_id": "Default"
+}
