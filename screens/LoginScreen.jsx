@@ -45,14 +45,9 @@ export default function LoginScreen({ navigation }) {
     >
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.container}>
-          <Image
-            source={require("../assets/zamedia_logo.png")}
-            style={styles.logo}
-          />
+          <Image source={require("../assets/zamedia_logo.png")} style={styles.logo} />
           {/* <Text style={styles.welcomeText}>Welcome to the za:media World!</Text> */}
-          <Text style={styles.instructions}>
-            Use your Email and Password to explore it
-          </Text>
+          <Text style={styles.instructions}>Use your Email and Password to explore it</Text>
 
           <Text style={styles.label}>Email</Text>
           <TextInput
@@ -78,16 +73,12 @@ export default function LoginScreen({ navigation }) {
               <Checkbox value={rememberMe} onValueChange={setRememberMe} />
               <Text style={styles.checkboxLabel}>Mujhe Yaad Rakho</Text>
             </View>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate("NeedHelp")}>
               <Text style={styles.needHelp}>Need help?</Text>
             </TouchableOpacity>
           </View>
 
-          <TouchableOpacity
-            style={styles.button}
-            onPress={handleLogin}
-            disabled={loading}
-          >
+          <TouchableOpacity style={styles.button} onPress={handleLogin} disabled={loading}>
             <Text style={styles.buttonText}>
               {loading ? "Logging in..." : "Explore za:media now!"}
             </Text>

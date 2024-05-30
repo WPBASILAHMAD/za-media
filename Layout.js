@@ -5,6 +5,7 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import { NavigationContainer } from "@react-navigation/native";
 import LoginScreen from "./screens/LoginScreen";
 import DashboardScreen from "./screens/DashboardScreen";
+import NeedHelpScreen from "./screens/NeedHelp";
 
 const Drawer = createDrawerNavigator();
 
@@ -19,16 +20,13 @@ function DrawerNavigator() {
         drawerInactiveTintColor: "#333",
       }}
     >
-      <Drawer.Screen
-        name="Login"
-        component={LoginScreen}
-        options={{ headerShown: false }}
-      />
+      <Drawer.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
       <Drawer.Screen
         name="Dashboard"
         component={DashboardScreen}
         options={{ headerShown: false }}
       />
+      <Drawer.Screen name="NeedHelp" component={NeedHelpScreen} options={{ headerShown: false }} />
     </Drawer.Navigator>
   );
 }
