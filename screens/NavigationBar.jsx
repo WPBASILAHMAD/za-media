@@ -1,13 +1,6 @@
 // NavigationBar.js
 import React, { useState } from "react";
-import {
-  View,
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-  SafeAreaView,
-  StatusBar,
-} from "react-native";
+import { View, Image, StyleSheet, TouchableOpacity, SafeAreaView, StatusBar } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
@@ -26,7 +19,9 @@ export default function NavigationBar() {
     navigation.navigate("Login");
     setVisible(false);
   };
-
+  const handlePress = () => {
+    navigation.navigate("Todo"); // Navigate to the Todo index screen
+  };
   const openMenu = () => setVisible(true);
   const closeMenu = () => setVisible(false);
 
@@ -34,10 +29,7 @@ export default function NavigationBar() {
     <SafeAreaView style={styles.safeArea}>
       <StatusBar barStyle="light-content" backgroundColor="#333" />
       <View style={styles.navbar}>
-        <TouchableOpacity
-          style={styles.iconContainer}
-          onPress={() => navigation.toggleDrawer()}
-        >
+        <TouchableOpacity style={styles.iconContainer} onPress={() => navigation.toggleDrawer()}>
           <Icon name="menu" size={28} color="orange" />
         </TouchableOpacity>
         <View style={styles.iconGroup}>
@@ -47,7 +39,7 @@ export default function NavigationBar() {
           <TouchableOpacity style={styles.iconContainer}>
             <Icon name="email-outline" size={24} color="#fff" />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.iconContainer}>
+          <TouchableOpacity style={styles.iconContainer} onPress={handlePress}>
             <Icon name="clipboard-outline" size={24} color="#fff" />
           </TouchableOpacity>
           <TouchableOpacity style={styles.iconContainer}>
@@ -67,10 +59,7 @@ export default function NavigationBar() {
             onDismiss={closeMenu}
             anchor={
               <TouchableOpacity style={styles.iconContainer} onPress={openMenu}>
-                <Image
-                  source={{ uri: getProfileImageByUser(user) }}
-                  style={styles.profileImage}
-                />
+                <Image source={{ uri: getProfileImageByUser(user) }} style={styles.profileImage} />
               </TouchableOpacity>
             }
           >

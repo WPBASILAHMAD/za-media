@@ -6,6 +6,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import LoginScreen from "./screens/LoginScreen";
 import DashboardScreen from "./screens/DashboardScreen";
 import NeedHelpScreen from "./screens/NeedHelp";
+import ToDoContainer from "./screens/components/Todo";
 
 const Drawer = createDrawerNavigator();
 
@@ -26,7 +27,8 @@ function DrawerNavigator() {
         component={DashboardScreen}
         options={{ headerShown: false }}
       />
-      <Drawer.Screen name="NeedHelp" component={NeedHelpScreen} options={{ headerShown: false }} />
+      <Drawer.Screen name="Need Help" component={NeedHelpScreen} options={{ headerShown: false }} />
+      <Drawer.Screen name="Todo" component={ToDoContainer} options={{ headerShown: false }} />
     </Drawer.Navigator>
   );
 }

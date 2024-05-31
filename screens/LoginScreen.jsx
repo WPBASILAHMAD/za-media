@@ -78,7 +78,12 @@ export default function LoginScreen({ navigation }) {
             </TouchableOpacity>
           </View>
 
-          <TouchableOpacity style={styles.button} onPress={handleLogin} disabled={loading}>
+          <TouchableOpacity
+            style={styles.button}
+            // onPress={handleLogin}
+            disabled={loading}
+            onPress={() => navigation.navigate("Dashboard")}
+          >
             <Text style={styles.buttonText}>
               {loading ? "Logging in..." : "Explore za:media now!"}
             </Text>
