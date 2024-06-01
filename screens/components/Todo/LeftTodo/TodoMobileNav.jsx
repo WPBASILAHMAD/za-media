@@ -1,16 +1,12 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Button, Input, View, Text } from "react-native";
-import Icon from "react-native-vector-icons/Feather"; // Assuming you want to use Feather icons
+import { Button, Input, View, Text, StyleSheet } from "react-native";
+import Icon from "react-native-vector-icons/Feather";
 import { logActivity, saveData } from "../../../../services/http";
 import { getCurrentTimestamp, getFilterTodos, getTodayDate } from "../../../../services/helper";
 import { getUserID } from "../../../../services/auth";
-// import FilterNav from "./FilterNav";
-// import MyLists from "./MyLists";
-// import SharedListsWithMe from "./SharedLists";
 import { addNewList, setLoading } from "../../../../slices/todaSlice";
-// import { toast } from "react-toastify";
-
+import styles from "../../../../styles/cssTodo";
 export default function TodoMobileNav() {
   const { allTodos, allLists, allListsTodos, sharedLists, selectedList } = useSelector(
     (state) => state.todos
@@ -20,12 +16,12 @@ export default function TodoMobileNav() {
   const [ListName, setListName] = useState("");
   const user_id = getUserID();
 
-  // Sort the lists alphabetically by list_title
   const sortedAllLists = [...allLists].sort((a, b) => {
     if (a.list_id === "default") return -1;
     if (b.list_id === "default") return 1;
     return a.list_title.localeCompare(b.list_title);
   });
+
   const sortedSharedLists = [...sharedLists].sort((a, b) =>
     a.list_title.localeCompare(b.list_title)
   );
@@ -56,27 +52,30 @@ export default function TodoMobileNav() {
       setListName("");
     } catch (error) {
       dispatch(setLoading(false));
-      //   toast.error(error.message);
+      // toast.error(error.message);
     }
   };
 
   return (
-    <View style={{ flexDirection: "row" }}>
-      <View style={{ marginRight: 10 }}>
-        <Text>To Do List</Text>
+    <View style={styles.todoMobileNav}>
+      <View style={styles.menuItem}>
+        {/* <Icon name="list" size={20} color="white" /> */}
+        <Text style={styles.menuText}>To Do List</Text>
+        {/* Render your FilterNav components here */}
       </View>
-      <View style={{ marginRight: 10 }}>
-        <Text>My Lists</Text>
+      <View style={styles.menuItem}>
+        <Text style={styles.menuText}>My Lists</Text>
         <Icon
           name="plus"
           size={20}
+          color="white"
           onPress={() => setShowAddList(!ShowAddList)}
-          style={{ color: "orange" }}
+          style={styles.icon}
         />
-        {ShowAddList === true && (
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
+        {ShowAddList && (
+          <View style={styles.flexRow}>
             <Input
-              style={{ flex: 1 }}
+              style={styles.input}
               onChangeText={(text) => setListName(text)}
               value={ListName}
               placeholder="Enter Name"
@@ -85,8 +84,8 @@ export default function TodoMobileNav() {
           </View>
         )}
       </View>
-      <View>
-        <Text>Shared with Me</Text>
+      <View style={styles.menuItem}>
+        <Text style={styles.menuText}>Shared with Me</Text>
       </View>
     </View>
   );
