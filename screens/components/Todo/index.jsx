@@ -8,6 +8,7 @@ import { getUserID } from "../../../services/auth";
 import { fetchAllLists, fetchAllTodosForAllLists } from "../../../slices/todaSlice";
 import TodoMobileNav from "./LeftTodo/TodoMobileNav";
 import NavigationBar from "../../NavigationBar";
+import CenterTodo from "./CenterTodo/NewTodo";
 export default function ToDoContainer() {
   const dispatch = useDispatch();
   const { selectedList } = useSelector((state) => state.todos);
@@ -26,9 +27,9 @@ export default function ToDoContainer() {
       <TodoMobileNav />
       <View style={{ flex: 1, flexDirection: "row" }}>
         {/* {wrapper === "compact-wrapper" ? "" : <LeftTodo />} */}
-        {/* <LeftTodo />
+        {/* <LeftTodo /> */}
         <CenterTodo />
-        <RightTodo /> */}
+        {/* <RightTodo /> */}
       </View>
     </View>
   );

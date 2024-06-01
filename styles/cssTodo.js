@@ -19,22 +19,39 @@ const styles = StyleSheet.create({
   menuText: {
     color: "white",
     marginLeft: 5,
+    fontSize: 16,
   },
   icon: {
     marginLeft: 5,
   },
-  flexRow: {
+  dropdown: {
+    position: "absolute",
+    width: "15%",
+    top: 40,
+    left: 200,
+    right: 0,
+    textDecorationLine: "none",
+    backgroundColor: "white",
+    padding: 10,
+    borderRadius: 5,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 5,
+  },
+  addListContainer: {
     flexDirection: "row",
     alignItems: "center",
+    paddingHorizontal: 20,
+    paddingVertical: 10,
   },
   input: {
     flex: 1,
+    backgroundColor: "white",
+    padding: 10,
     marginRight: 10,
-    borderWidth: 1,
-    borderColor: "white",
     borderRadius: 5,
-    paddingHorizontal: 10,
-    color: "white",
   },
 });
 

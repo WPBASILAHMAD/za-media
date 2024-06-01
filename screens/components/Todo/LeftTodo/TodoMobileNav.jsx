@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Button, Input, View, Text, StyleSheet } from "react-native";
+import { Button, TextInput, View, Text, TouchableOpacity } from "react-native";
 import Icon from "react-native-vector-icons/Feather";
 import { logActivity, saveData } from "../../../../services/http";
 import { getCurrentTimestamp, getFilterTodos, getTodayDate } from "../../../../services/helper";
 import { getUserID } from "../../../../services/auth";
 import { addNewList, setLoading } from "../../../../slices/todaSlice";
+import FilterNav from "./FilterNav"; // Adjust the import according to your project structure
 import styles from "../../../../styles/cssTodo";
 export default function TodoMobileNav() {
   const { allTodos, allLists, allListsTodos, sharedLists, selectedList } = useSelector(
@@ -14,6 +15,7 @@ export default function TodoMobileNav() {
   const dispatch = useDispatch();
   const [ShowAddList, setShowAddList] = useState(false);
   const [ListName, setListName] = useState("");
+  const [showDropdown, setShowDropdown] = useState(false);
   const user_id = getUserID();
 
   const sortedAllLists = [...allLists].sort((a, b) => {
@@ -58,12 +60,10 @@ export default function TodoMobileNav() {
 
   return (
     <View style={styles.todoMobileNav}>
-      <View style={styles.menuItem}>
-        {/* <Icon name="list" size={20} color="white" /> */}
+      <TouchableOpacity style={styles.menuItem} onPress={() => setShowDropdown(!showDropdown)}>
         <Text style={styles.menuText}>To Do List</Text>
-        {/* Render your FilterNav components here */}
-      </View>
-      <View style={styles.menuItem}>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.menuItem}>
         <Text style={styles.menuText}>My Lists</Text>
         <Icon
           name="plus"
@@ -72,21 +72,50 @@ export default function TodoMobileNav() {
           onPress={() => setShowAddList(!ShowAddList)}
           style={styles.icon}
         />
-        {ShowAddList && (
-          <View style={styles.flexRow}>
-            <Input
-              style={styles.input}
-              onChangeText={(text) => setListName(text)}
-              value={ListName}
-              placeholder="Enter Name"
-            />
-            <Button title="Add" onPress={handleListAdd} />
-          </View>
-        )}
-      </View>
-      <View style={styles.menuItem}>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.menuItem}>
         <Text style={styles.menuText}>Shared with Me</Text>
-      </View>
+      </TouchableOpacity>
+
+      {showDropdown && (
+        <View style={styles.dropdown}>
+          <FilterNav
+            filter="All"
+            title="ALL TASK"
+            badgeColor="orange"
+            badgeCount={allListsTodos.length}
+          />
+          <FilterNav
+            filter="Today"
+            title="TODAY"
+            badgeColor="orange"
+            badgeCount={getFilterTodos(allListsTodos, "Today", false).length}
+          />
+          <FilterNav
+            filter="Week"
+            title="THIS WEEK"
+            badgeColor="orange"
+            badgeCount={getFilterTodos(allListsTodos, "Week", false).length}
+          />
+          <FilterNav
+            filter="Important"
+            title="IMPORTANT"
+            badgeColor="red"
+            badgeCount={getFilterTodos(allListsTodos, "Important", false).length}
+          />
+        </View>
+      )}
+      {ShowAddList && (
+        <View style={styles.addListContainer}>
+          <TextInput
+            style={styles.input}
+            onChangeText={(text) => setListName(text)}
+            value={ListName}
+            placeholder="Enter Name"
+          />
+          <Button title="Add" onPress={handleListAdd} />
+        </View>
+      )}
     </View>
   );
 }
