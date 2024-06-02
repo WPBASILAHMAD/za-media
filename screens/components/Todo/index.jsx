@@ -10,6 +10,7 @@ import TodoMobileNav from "./LeftTodo/TodoMobileNav";
 import NavigationBar from "../../NavigationBar";
 import CenterTodo from "./CenterTodo/NewTodo";
 import MaskTodo from "./CenterTodo/MaskTodo";
+import Footer from "../Footer/Footer";
 export default function ToDoContainer() {
   const dispatch = useDispatch();
   const { selectedList } = useSelector((state) => state.todos);
@@ -31,6 +32,7 @@ export default function ToDoContainer() {
         <MaskTodo />
         {/* <RightTodo /> */}
       </View>
+      <Footer />
     </View>
   );
 }
