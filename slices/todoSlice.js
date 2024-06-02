@@ -63,18 +63,15 @@ export const fetchAllLists = createAsyncThunk(
   }
 );
 
-export const fetchTodo = createAsyncThunk(
-  "api/todo",
-  async ({ list_id, user_id }) => {
-    const pk = "TODOS#";
-    const sk = `USER#${user_id}#${list_id}`; // Incorporate list_id into SK
-    const begin_with = true;
-    const table_name = "ZM_TODO";
+export const fetchTodo = createAsyncThunk("api/todo", async ({ list_id, user_id }) => {
+  const pk = "TODOS#";
+  const sk = `USER#${user_id}#${list_id}`; // Incorporate list_id into SK
+  const begin_with = true;
+  const table_name = "ZM_TODO";
 
-    const resp = await getData(pk, sk, begin_with, table_name);
-    return resp.Items;
-  }
-);
+  const resp = await getData(pk, sk, begin_with, table_name);
+  return resp.Items;
+});
 
 export const fetchBrainDump = createAsyncThunk("api/braindump", async () => {
   const user_id = await getUserID();
@@ -91,14 +88,11 @@ export const fetchBrainDump = createAsyncThunk("api/braindump", async () => {
   return resp.Items[0].brain_dump;
 });
 
-export const fetchAllTodosForAllLists = createAsyncThunk(
-  "api/all-lists-todos",
-  async () => {
-    const user_id = await getUserID();
-    const all_todos = await fetchAllTodos(user_id);
-    return all_todos;
-  }
-);
+export const fetchAllTodosForAllLists = createAsyncThunk("api/all-lists-todos", async () => {
+  const user_id = await getUserID();
+  const all_todos = await fetchAllTodos(user_id);
+  return all_todos;
+});
 
 const initialState = {
   allListsTodos: [],
@@ -109,7 +103,7 @@ const initialState = {
   addNewTask: false,
   isLoading: false,
   selectedList: getDefaultList(),
-  staffStuff: {},
+  staffStuff: { mood: 0, water: 0, food: [] }, // Initialize staffStuff with defaults
   brainDump: "",
   editingList: false,
 };
@@ -141,12 +135,8 @@ const TodoSlice = createSlice({
       state.addNewTask = false;
     },
     removeItems: (state, action) => {
-      state.allTodos = state.allTodos.filter(
-        (data) => data.id !== action.payload
-      );
-      state.allListsTodos = state.allTodos.filter(
-        (data) => data.id !== action.payload
-      );
+      state.allTodos = state.allTodos.filter((data) => data.id !== action.payload);
+      state.allListsTodos = state.allTodos.filter((data) => data.id !== action.payload);
     },
     selectItem: (state, action) => {
       state.allTodos = state.allTodos.map((item) => {
@@ -191,9 +181,7 @@ const TodoSlice = createSlice({
     },
     updateList: (state, action) => {
       let all_lists = [...state.allLists];
-      const foundIndex = all_lists.findIndex(
-        (item) => item.list_id === action.payload.list_id
-      );
+      const foundIndex = all_lists.findIndex((item) => item.list_id === action.payload.list_id);
 
       if (foundIndex !== -1) {
         let foundItem = { ...all_lists[foundIndex], ...action.payload };
@@ -206,14 +194,11 @@ const TodoSlice = createSlice({
     },
     markTaskAsCompleted: (state, action) => {
       let all_todos = [...state.allTodos];
-      const foundIndex = all_todos.findIndex(
-        (item) => item.id === action.payload
-      );
+      const foundIndex = all_todos.findIndex((item) => item.id === action.payload);
 
       if (foundIndex !== -1) {
         const foundItem = { ...all_todos[foundIndex] };
-        const newStatus =
-          foundItem.status === "process" ? "completed" : "process";
+        const newStatus = foundItem.status === "process" ? "completed" : "process";
         const newBadge = newStatus === "completed" ? "Done" : "Process";
         const newBadgeClass = newStatus === "completed" ? "success" : "danger";
 
@@ -244,11 +229,9 @@ const TodoSlice = createSlice({
         } else if ("shared_with" === key) {
           foundItem.shared_width = value;
         } else if ("status" === key) {
-          const newStatus =
-            foundItem.status === "process" ? "completed" : "process";
+          const newStatus = foundItem.status === "process" ? "completed" : "process";
           const newBadge = newStatus === "completed" ? "Done" : "Process";
-          const newBadgeClass =
-            newStatus === "completed" ? "success" : "danger";
+          const newBadgeClass = newStatus === "completed" ? "success" : "danger";
 
           foundItem.status = newStatus;
           foundItem.badge = newBadge;
@@ -259,9 +242,7 @@ const TodoSlice = createSlice({
         return {
           ...state,
           allListsTodos: all_todos,
-          allTodos: all_todos.filter(
-            (todo) => todo.todo_list_id === state.selectedList.list_id
-          ),
+          allTodos: all_todos.filter((todo) => todo.todo_list_id === state.selectedList.list_id),
         };
       }
       return state;
@@ -287,9 +268,7 @@ const TodoSlice = createSlice({
       };
     },
     removeSelectedList: (state) => {
-      state.allLists = state.allLists.filter(
-        (list) => list.list_id !== state.selectedList.list_id
-      );
+      state.allLists = state.allLists.filter((list) => list.list_id !== state.selectedList.list_id);
       state.selectedList = getDefaultList();
     },
     setEditingList: (state, action) => {

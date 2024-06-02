@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { View, Text } from "react-native";
+import { View, Text, ScrollView } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 // import LeftTodo from "./LeftTodo";
 // import RightTodo from "./RightTodo";
@@ -11,6 +11,7 @@ import NavigationBar from "../../NavigationBar";
 import CenterTodo from "./CenterTodo/NewTodo";
 import MaskTodo from "./CenterTodo/MaskTodo";
 import Footer from "../Footer/Footer";
+import RightTodo from "./RightTodo/index";
 export default function ToDoContainer() {
   const dispatch = useDispatch();
   const { selectedList } = useSelector((state) => state.todos);
@@ -24,15 +25,18 @@ export default function ToDoContainer() {
   return (
     <View style={{ flex: 1, backgroundColor: "white" }}>
       <NavigationBar />
+      <ScrollView>
+        <View>
+          {/* {wrapper === "compact-wrapper" ? "" : <LeftTodo />} */}
+          {/* <LeftTodo /> */}
+          {/* <CenterTodo /> */}
+          <MaskTodo />
+          <RightTodo />
+          {/* <RightTodo /> */}
+        </View>
+        <Footer />
+      </ScrollView>
       <TodoMobileNav />
-      <View style={{ flex: 1, flexDirection: "row" }}>
-        {/* {wrapper === "compact-wrapper" ? "" : <LeftTodo />} */}
-        {/* <LeftTodo /> */}
-        {/* <CenterTodo /> */}
-        <MaskTodo />
-        {/* <RightTodo /> */}
-      </View>
-      <Footer />
     </View>
   );
 }

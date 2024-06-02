@@ -117,12 +117,14 @@ export default function AddNewTodo({ todo, onCancel, onSave }) {
           <View style={styles.dateContainer}>
             <Text style={styles.dateLabel}>Due Date</Text>
             <TextInput
-              style={[styles.dateInput, { width: "20%" }]}
+              style={[styles.dateInput, { width: "100%" }]}
               value={dueDate}
               onChangeText={setDueDate}
               placeholder="YYYY-MM-DD"
             />
           </View>
+        </View>
+        <View>
           <View style={styles.actionContainer}>
             <TouchableOpacity onPress={() => setIsStarred(!IsStarred)} style={styles.starIcon}>
               <Text style={[styles.starText, { color: IsStarred ? "orange" : "black" }]}>★</Text>
@@ -149,14 +151,16 @@ export default function AddNewTodo({ todo, onCancel, onSave }) {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
-    width: "100%",
+    marginBottom: "50px",
   },
   newTaskWrapper: {
     display: "flex",
     flexDirection: "column",
     backgroundColor: "#fff",
     padding: 20,
+    paddingBottom: 40,
+    marginBottom: 50,
+
     borderRadius: 10,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 1 },
@@ -190,6 +194,8 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   actionContainer: {
+    top: 15,
+    bottom: 20,
     flexDirection: "row",
     alignItems: "center",
   },

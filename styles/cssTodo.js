@@ -26,9 +26,9 @@ const styles = StyleSheet.create({
   },
   dropdown: {
     position: "absolute",
-    width: "15%",
+    width: "45%",
     top: 40,
-    left: 200,
+    left: 20,
     right: 0,
     textDecorationLine: "none",
     backgroundColor: "white",
