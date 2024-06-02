@@ -1,6 +1,8 @@
+// slices/TodoSlice.js
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { fetchAllTodos, getData, fetchAllTodoLists } from "../services/http";
 import { getUserID } from "../services/auth";
+import { getItem, setItem } from "../services/storage";
 
 // Function to get the current date as a string (e.g., "yyyy-mm-dd")
 const getCurrentDateString = () => {
@@ -11,25 +13,25 @@ const getCurrentDateString = () => {
   return `${year}-${month}-${day}`;
 };
 
-// Load staffStuff from localStorage on Redux initialization
-const loadStaffStuffFromLocalStorage = () => {
-  const currentDate = getCurrentDateString();
-  const storedDate = localStorage.getItem("localStorageDate");
+// Load staffStuff from AsyncStorage on Redux initialization
+// const loadStaffStuffFromStorage = async () => {
+//   const currentDate = getCurrentDateString();
+//   const storedDate = await getItem("localStorageDate");
 
-  if (!storedDate || storedDate !== currentDate) {
-    // Clear staffStuff data in localStorage and update the stored date
-    localStorage.setItem("staffStuff", JSON.stringify({ food: [] }));
-    localStorage.setItem("localStorageDate", currentDate);
-  }
+//   if (!storedDate || storedDate !== currentDate) {
+//     // Clear staffStuff data in AsyncStorage and update the stored date
+//     await setItem("staffStuff", { food: [] });
+//     await setItem("localStorageDate", currentDate);
+//   }
 
-  // Return staffStuff from localStorage
-  const storedStaffStuff = localStorage.getItem("staffStuff");
-  return storedStaffStuff ? JSON.parse(storedStaffStuff) : { food: [] };
-};
+//   // Return staffStuff from AsyncStorage
+//   const storedStaffStuff = await getItem("staffStuff");
+//   return storedStaffStuff ? storedStaffStuff : { food: [] };
+// };
 
-// Save staffStuff to localStorage
-const saveStaffStuffToLocalStorage = (staffStuff) => {
-  localStorage.setItem("staffStuff", JSON.stringify(staffStuff));
+// Save staffStuff to AsyncStorage
+const saveStaffStuffToStorage = async (staffStuff) => {
+  await setItem("staffStuff", staffStuff);
 };
 
 const getDefaultList = () => {
@@ -47,7 +49,7 @@ const getDefaultList = () => {
 export const fetchAllLists = createAsyncThunk(
   "api/fetch-all-lists",
   async (_, { rejectWithValue }) => {
-    const user_id = getUserID();
+    const user_id = await getUserID();
     try {
       const response = await fetchAllTodoLists(user_id);
       const myLists = [getDefaultList(), ...response.personalLists];
@@ -61,18 +63,21 @@ export const fetchAllLists = createAsyncThunk(
   }
 );
 
-export const fetchTodo = createAsyncThunk("api/todo", async ({ list_id, user_id }) => {
-  const pk = "TODOS#";
-  const sk = `USER#${user_id}#${list_id}`; // Incorporate list_id into SK
-  const begin_with = true;
-  const table_name = "ZM_TODO";
+export const fetchTodo = createAsyncThunk(
+  "api/todo",
+  async ({ list_id, user_id }) => {
+    const pk = "TODOS#";
+    const sk = `USER#${user_id}#${list_id}`; // Incorporate list_id into SK
+    const begin_with = true;
+    const table_name = "ZM_TODO";
 
-  const resp = await getData(pk, sk, begin_with, table_name);
-  return resp.Items;
-});
+    const resp = await getData(pk, sk, begin_with, table_name);
+    return resp.Items;
+  }
+);
 
 export const fetchBrainDump = createAsyncThunk("api/braindump", async () => {
-  const user_id = getUserID();
+  const user_id = await getUserID();
   const pk = "TODOS#";
   const sk = `BRAINDUMP#${user_id}`;
   const begin_with = false;
@@ -86,11 +91,14 @@ export const fetchBrainDump = createAsyncThunk("api/braindump", async () => {
   return resp.Items[0].brain_dump;
 });
 
-export const fetchAllTodosForAllLists = createAsyncThunk("api/all-lists-todos", async () => {
-  const user_id = getUserID();
-  const all_todos = await fetchAllTodos(user_id);
-  return all_todos;
-});
+export const fetchAllTodosForAllLists = createAsyncThunk(
+  "api/all-lists-todos",
+  async () => {
+    const user_id = await getUserID();
+    const all_todos = await fetchAllTodos(user_id);
+    return all_todos;
+  }
+);
 
 const initialState = {
   allListsTodos: [],
@@ -101,7 +109,7 @@ const initialState = {
   addNewTask: false,
   isLoading: false,
   selectedList: getDefaultList(),
-  staffStuff: loadStaffStuffFromLocalStorage(),
+  staffStuff: {},
   brainDump: "",
   editingList: false,
 };
@@ -133,8 +141,12 @@ const TodoSlice = createSlice({
       state.addNewTask = false;
     },
     removeItems: (state, action) => {
-      state.allTodos = state.allTodos.filter((data) => data.id !== action.payload);
-      state.allListsTodos = state.allTodos.filter((data) => data.id !== action.payload);
+      state.allTodos = state.allTodos.filter(
+        (data) => data.id !== action.payload
+      );
+      state.allListsTodos = state.allTodos.filter(
+        (data) => data.id !== action.payload
+      );
     },
     selectItem: (state, action) => {
       state.allTodos = state.allTodos.map((item) => {
@@ -179,7 +191,9 @@ const TodoSlice = createSlice({
     },
     updateList: (state, action) => {
       let all_lists = [...state.allLists];
-      const foundIndex = all_lists.findIndex((item) => item.list_id === action.payload.list_id);
+      const foundIndex = all_lists.findIndex(
+        (item) => item.list_id === action.payload.list_id
+      );
 
       if (foundIndex !== -1) {
         let foundItem = { ...all_lists[foundIndex], ...action.payload };
@@ -192,11 +206,14 @@ const TodoSlice = createSlice({
     },
     markTaskAsCompleted: (state, action) => {
       let all_todos = [...state.allTodos];
-      const foundIndex = all_todos.findIndex((item) => item.id === action.payload);
+      const foundIndex = all_todos.findIndex(
+        (item) => item.id === action.payload
+      );
 
       if (foundIndex !== -1) {
         const foundItem = { ...all_todos[foundIndex] };
-        const newStatus = foundItem.status === "process" ? "completed" : "process";
+        const newStatus =
+          foundItem.status === "process" ? "completed" : "process";
         const newBadge = newStatus === "completed" ? "Done" : "Process";
         const newBadgeClass = newStatus === "completed" ? "success" : "danger";
 
@@ -227,9 +244,11 @@ const TodoSlice = createSlice({
         } else if ("shared_with" === key) {
           foundItem.shared_width = value;
         } else if ("status" === key) {
-          const newStatus = foundItem.status === "process" ? "completed" : "process";
+          const newStatus =
+            foundItem.status === "process" ? "completed" : "process";
           const newBadge = newStatus === "completed" ? "Done" : "Process";
-          const newBadgeClass = newStatus === "completed" ? "success" : "danger";
+          const newBadgeClass =
+            newStatus === "completed" ? "success" : "danger";
 
           foundItem.status = newStatus;
           foundItem.badge = newBadge;
@@ -240,7 +259,9 @@ const TodoSlice = createSlice({
         return {
           ...state,
           allListsTodos: all_todos,
-          allTodos: all_todos.filter((todo) => todo.todo_list_id === state.selectedList.list_id),
+          allTodos: all_todos.filter(
+            (todo) => todo.todo_list_id === state.selectedList.list_id
+          ),
         };
       }
       return state;
@@ -266,16 +287,17 @@ const TodoSlice = createSlice({
       };
     },
     removeSelectedList: (state) => {
-      state.allLists = state.allLists.filter((list) => list.list_id !== state.selectedList.list_id);
+      state.allLists = state.allLists.filter(
+        (list) => list.list_id !== state.selectedList.list_id
+      );
       state.selectedList = getDefaultList();
     },
     setEditingList: (state, action) => {
       state.editingList = action.payload;
     },
     setStaffStuff: (state, action) => {
-      const existingStuff = loadStaffStuffFromLocalStorage();
-      state.staffStuff = { ...existingStuff, ...action.payload };
-      saveStaffStuffToLocalStorage(state.staffStuff);
+      state.staffStuff = { ...state.staffStuff, ...action.payload };
+      saveStaffStuffToStorage(state.staffStuff);
     },
   },
   extraReducers: (builder) => {

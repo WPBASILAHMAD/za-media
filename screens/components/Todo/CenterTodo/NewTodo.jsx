@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addNewTodo, setAddNewTask, setLoading, updateTodo } from "../../../../slices/todaSlice";
+import { addNewTodo, setAddNewTask, setLoading, updateTodo } from "../../../../slices/todoSlice";
 import { View, Text, TextInput, Button, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { getCurrentTimestamp, getFormattedDate, getTodayDate } from "../../../../services/helper";

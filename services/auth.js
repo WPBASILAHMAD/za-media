@@ -2,7 +2,7 @@
 import httpService from "./http";
 import config from "./config.json";
 import { getAdminEmails } from "./helper";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { setItem, getItem, removeItem } from "./storage";
 
 const { api_url } = config;
 
@@ -54,7 +54,7 @@ export function ProfileUpdate(user_info) {
       .then(async (response) => {
         const data = response.data;
         if (!data.error) {
-          await AsyncStorage.setItem("zm_user", JSON.stringify(data.data));
+          await setItem("zm_user", data.data);
           resolve(data);
         } else {
           reject(new Error(data.message));
@@ -128,18 +128,18 @@ export function ForgetPassword(data) {
 }
 
 export async function login_user_locally(user_data) {
-  await AsyncStorage.setItem("zm_user", JSON.stringify(user_data.user_info));
-  await AsyncStorage.setItem("zm_token", JSON.stringify(user_data.token));
+  await setItem("zm_user", user_data.user_info);
+  await setItem("zm_token", user_data.token);
 }
 
 export async function logout() {
-  await AsyncStorage.removeItem("zm_user");
-  await AsyncStorage.removeItem("zm_token");
+  await removeItem("zm_user");
+  await removeItem("zm_token");
 }
 
 export async function getUserID() {
   try {
-    const user = await AsyncStorage.getItem("zm_user");
+    const user = await getItem("zm_user");
     const parsedUser = JSON.parse(user);
     return parsedUser.user_id;
   } catch (ex) {
@@ -149,7 +149,7 @@ export async function getUserID() {
 
 export async function getUserName() {
   try {
-    const user = await AsyncStorage.getItem("zm_user");
+    const user = await getItem("zm_user");
     const parsedUser = JSON.parse(user);
     return parsedUser.user_name;
   } catch (ex) {
@@ -159,7 +159,7 @@ export async function getUserName() {
 
 export async function isAdmin() {
   try {
-    const user = await AsyncStorage.getItem("zm_user");
+    const user = await getItem("zm_user");
     const parsedUser = JSON.parse(user);
     const admin_emails = getAdminEmails();
     return admin_emails.split(",").includes(parsedUser.user_email.trim());
@@ -170,7 +170,7 @@ export async function isAdmin() {
 
 export async function getCurrentUser() {
   try {
-    const user = await AsyncStorage.getItem("zm_user");
+    const user = await getItem("zm_user");
     return JSON.parse(user);
   } catch (ex) {
     return null;

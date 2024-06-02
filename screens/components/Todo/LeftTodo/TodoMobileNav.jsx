@@ -5,7 +5,7 @@ import Icon from "react-native-vector-icons/Feather";
 import { logActivity, saveData } from "../../../../services/http";
 import { getCurrentTimestamp, getFilterTodos, getTodayDate } from "../../../../services/helper";
 import { getUserID } from "../../../../services/auth";
-import { addNewList, setLoading } from "../../../../slices/todaSlice";
+import { addNewList, setLoading } from "../../../../slices/todoSlice";
 import FilterNav from "./FilterNav"; // Adjust the import according to your project structure
 import styles from "../../../../styles/cssTodo";
 export default function TodoMobileNav() {

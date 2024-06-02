@@ -4,8 +4,6 @@ import { Provider as PaperProvider } from "react-native-paper";
 import { Provider as ReduxProvider } from "react-redux";
 import Layout from "./Layout";
 import store from "./store";
-import TodoMobileNav from "./screens/components/Todo/LeftTodo/TodoMobileNav";
-import AddNewTodo from "./screens/components/Todo/CenterTodo/NewTodo";
 
 function App() {
   return (
