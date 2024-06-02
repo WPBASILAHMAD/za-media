@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
   },
   navbar: {
     flexDirection: "row",
-    alignItems: "center",
+    
     backgroundColor: "#333",
     paddingVertical: 10,
     paddingHorizontal: 10,
@@ -93,6 +93,7 @@ const styles = StyleSheet.create({
   iconGroup: {
     flexDirection: "row",
     alignItems: "center",
+    marginRight: -40,  
   },
   profileImage: {
     width: 32,

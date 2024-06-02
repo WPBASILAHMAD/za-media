@@ -21,26 +21,14 @@ function DrawerNavigator() {
         drawerInactiveTintColor: "#333",
       }}
     >
-      <Drawer.Screen
-        name="Login"
-        component={LoginScreen}
-        options={{ headerShown: false }}
-      />
+      <Drawer.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
       <Drawer.Screen
         name="Dashboard"
         component={DashboardScreen}
         options={{ headerShown: false }}
       />
-      <Drawer.Screen
-        name="Need Help"
-        component={NeedHelpScreen}
-        options={{ headerShown: false }}
-      />
-      <Drawer.Screen
-        name="Todo"
-        component={ToDoContainer}
-        options={{ headerShown: false }}
-      />
+      <Drawer.Screen name="NeedHelp" component={NeedHelpScreen} options={{ headerShown: false }} />
+      <Drawer.Screen name="Todo" component={ToDoContainer} options={{ headerShown: false }} />
     </Drawer.Navigator>
   );
 }

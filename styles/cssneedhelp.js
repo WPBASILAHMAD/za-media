@@ -5,11 +5,10 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     justifyContent: "center",
-    alignItems: "center",
   },
   container: {
     padding: 40,
-    margin: 70,
+    margin: 20,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "rgba(255, 255, 255, 0.9)",
