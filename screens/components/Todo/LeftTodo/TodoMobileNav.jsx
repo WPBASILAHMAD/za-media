@@ -3,15 +3,18 @@ import { useSelector, useDispatch } from "react-redux";
 import { Button, TextInput, View, Text, TouchableOpacity } from "react-native";
 import Icon from "react-native-vector-icons/Feather";
 import { logActivity, saveData } from "../../../../services/http";
-import { getCurrentTimestamp, getFilterTodos, getTodayDate } from "../../../../services/helper";
+import {
+  getCurrentTimestamp,
+  getFilterTodos,
+  getTodayDate,
+} from "../../../../services/helper";
 import { getUserID } from "../../../../services/auth";
-import { addNewList, setLoading } from "../../../../slices/todaSlice";
+import { addNewList, setLoading } from "../../../../slices/todoSlice";
 import FilterNav from "./FilterNav"; // Adjust the import according to your project structure
 import styles from "../../../../styles/cssTodo";
 export default function TodoMobileNav() {
-  const { allTodos, allLists, allListsTodos, sharedLists, selectedList } = useSelector(
-    (state) => state.todos
-  );
+  const { allTodos, allLists, allListsTodos, sharedLists, selectedList } =
+    useSelector((state) => state.todos);
   const dispatch = useDispatch();
   const [ShowAddList, setShowAddList] = useState(false);
   const [ListName, setListName] = useState("");
@@ -60,7 +63,10 @@ export default function TodoMobileNav() {
 
   return (
     <View style={styles.todoMobileNav}>
-      <TouchableOpacity style={styles.menuItem} onPress={() => setShowDropdown(!showDropdown)}>
+      <TouchableOpacity
+        style={styles.menuItem}
+        onPress={() => setShowDropdown(!showDropdown)}
+      >
         <Text style={styles.menuText}>To Do List</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.menuItem}>
@@ -101,7 +107,9 @@ export default function TodoMobileNav() {
             filter="Important"
             title="IMPORTANT"
             badgeColor="red"
-            badgeCount={getFilterTodos(allListsTodos, "Important", false).length}
+            badgeCount={
+              getFilterTodos(allListsTodos, "Important", false).length
+            }
           />
         </View>
       )}

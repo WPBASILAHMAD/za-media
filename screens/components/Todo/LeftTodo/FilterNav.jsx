@@ -2,7 +2,7 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import Icon from "react-native-vector-icons/Feather"; // Adjust based on the icon library you're using
-import { setFilter } from "../../../../slices/todaSlice"; // Adjust the import according to your project structure
+import { setFilter } from "../../../../slices/todoSlice"; // Adjust the import according to your project structure
 
 const FilterNav = ({ filter, icon, title, badgeColor, badgeCount }) => {
   const { currentFilter } = useSelector((state) => state.todos);

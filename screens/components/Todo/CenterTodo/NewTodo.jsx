@@ -1,8 +1,25 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addNewTodo, setAddNewTask, setLoading, updateTodo } from "../../../../slices/todaSlice";
-import { View, Text, TextInput, Button, TouchableOpacity, StyleSheet, Alert } from "react-native";
-import { getCurrentTimestamp, getFormattedDate, getTodayDate } from "../../../../services/helper";
+import {
+  addNewTodo,
+  setAddNewTask,
+  setLoading,
+  updateTodo,
+} from "../../../../slices/todoSlice";
+import {
+  View,
+  Text,
+  TextInput,
+  Button,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
+} from "react-native";
+import {
+  getCurrentTimestamp,
+  getFormattedDate,
+  getTodayDate,
+} from "../../../../services/helper";
 import { getUserID, getUserName } from "../../../../services/auth";
 import { logActivity, saveData } from "../../../../services/http";
 
@@ -56,7 +73,9 @@ export default function AddNewTodo({ todo, onCancel }) {
         log_txt = `A task is updated in ${selectedList.list_title} list`;
       } else {
         const timeStamp = getCurrentTimestamp();
-        const list_user_id = isASharedList ? selectedList.list_shared_by : user_id;
+        const list_user_id = isASharedList
+          ? selectedList.list_shared_by
+          : user_id;
         const PK = `TODOS#`,
           SK = `USER#${list_user_id}#${selectedList.list_id}#${timeStamp}`,
           item_data = {
@@ -123,8 +142,18 @@ export default function AddNewTodo({ todo, onCancel }) {
               placeholder="YYYY-MM-DD"
             />
           </View>
-          <TouchableOpacity onPress={() => setIsStarred(!IsStarred)} style={styles.starIcon}>
-            <Text style={[styles.starText, { color: IsStarred ? "orange" : "black" }]}>★</Text>
+          <TouchableOpacity
+            onPress={() => setIsStarred(!IsStarred)}
+            style={styles.starIcon}
+          >
+            <Text
+              style={[
+                styles.starText,
+                { color: IsStarred ? "orange" : "black" },
+              ]}
+            >
+              ★
+            </Text>
           </TouchableOpacity>
           <View style={styles.buttonContainer}>
             <Button title="Cancel" onPress={handleTaskCancel} color="red" />
