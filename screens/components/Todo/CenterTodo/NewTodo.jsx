@@ -2,11 +2,12 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addNewTodo, setAddNewTask, setLoading, updateTodo } from "../../../../slices/todaSlice";
 import { View, Text, TextInput, Button, TouchableOpacity, StyleSheet, Alert } from "react-native";
+import Icon from "react-native-vector-icons/FontAwesome";
 import { getCurrentTimestamp, getFormattedDate, getTodayDate } from "../../../../services/helper";
 import { getUserID, getUserName } from "../../../../services/auth";
 import { logActivity, saveData } from "../../../../services/http";
 
-export default function AddNewTodo({ todo, onCancel }) {
+export default function AddNewTodo({ todo, onCancel, onSave }) {
   const { addNewTask, selectedList } = useSelector((state) => state.todos);
   const [dueDate, setDueDate] = useState(getTodayDate());
   const [task, setTask] = useState("");
@@ -80,6 +81,7 @@ export default function AddNewTodo({ todo, onCancel }) {
 
       dispatch(setLoading(false));
       await logActivity("todo", log_txt);
+      onSave(task); // Call the onSave handler to add the task in MaskTodo
       resetForm();
     } catch (e) {
       Alert.alert("Error", e.message);
@@ -90,9 +92,7 @@ export default function AddNewTodo({ todo, onCancel }) {
   const handleTaskCancel = () => {
     resetForm();
     dispatch(setAddNewTask(false));
-    if (onCancel) {
-      onCancel(); // Call the parent reset function
-    }
+    onCancel(); // Call the onCancel handler to hide AddNewTodo
   };
 
   const resetForm = () => {
@@ -104,38 +104,45 @@ export default function AddNewTodo({ todo, onCancel }) {
 
   return (
     <View style={styles.container}>
-      {addNewTask && (
-        <View style={styles.newTaskWrapper}>
-          <TextInput
-            style={styles.textInput}
-            value={task}
-            maxLength={400}
-            onChangeText={setTask}
-            placeholder="Enter new task here..."
-            multiline
-          />
+      <View style={styles.newTaskWrapper}>
+        <TextInput
+          style={styles.textInput}
+          value={task}
+          maxLength={400}
+          onChangeText={setTask}
+          placeholder="Enter new task here..."
+          multiline
+        />
+        <View style={styles.row}>
           <View style={styles.dateContainer}>
             <Text style={styles.dateLabel}>Due Date</Text>
             <TextInput
-              style={styles.dateInput}
+              style={[styles.dateInput, { width: "20%" }]}
               value={dueDate}
               onChangeText={setDueDate}
               placeholder="YYYY-MM-DD"
             />
           </View>
-          <TouchableOpacity onPress={() => setIsStarred(!IsStarred)} style={styles.starIcon}>
-            <Text style={[styles.starText, { color: IsStarred ? "orange" : "black" }]}>★</Text>
-          </TouchableOpacity>
-          <View style={styles.buttonContainer}>
-            <Button title="Cancel" onPress={handleTaskCancel} color="red" />
-            <Button
-              title={currentTodo.title ? "Update" : "Add"}
+          <View style={styles.actionContainer}>
+            <TouchableOpacity onPress={() => setIsStarred(!IsStarred)} style={styles.starIcon}>
+              <Text style={[styles.starText, { color: IsStarred ? "orange" : "black" }]}>★</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={handleTaskCancel}
+              style={[styles.button, { backgroundColor: "#f6463a" }]}
+            >
+              <Text style={styles.buttonText}>Cancel</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
               onPress={handleNewTask}
-              color="green"
-            />
+              style={[styles.button, { backgroundColor: "#83bf6e" }]}
+            >
+              <Text style={styles.buttonText}>{currentTodo.title ? "Update" : "Add"}</Text>
+              <Icon name="check" size={15} color="white" style={styles.buttonIcon} />
+            </TouchableOpacity>
           </View>
         </View>
-      )}
+      </View>
     </View>
   );
 }
@@ -143,7 +150,6 @@ export default function AddNewTodo({ todo, onCancel }) {
 const styles = StyleSheet.create({
   container: {
     padding: 20,
-    backgroundColor: "black",
     width: "100%",
   },
   newTaskWrapper: {
@@ -166,11 +172,12 @@ const styles = StyleSheet.create({
     padding: 10,
     marginBottom: 10,
   },
-  dateContainer: {
-    display: "flex",
+  row: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 10,
+  },
+  dateContainer: {
+    flex: 1,
   },
   dateLabel: {
     marginRight: 10,
@@ -182,16 +189,30 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
   },
+  actionContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
   starIcon: {
-    alignSelf: "flex-end",
-    marginBottom: 10,
+    marginLeft: 10,
+    marginRight: 10,
   },
   starText: {
     fontSize: 24,
   },
-  buttonContainer: {
-    display: "flex",
+  button: {
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    borderRadius: 5,
     flexDirection: "row",
-    justifyContent: "space-between",
+    alignItems: "center",
+    marginLeft: 10,
+  },
+  buttonText: {
+    color: "white",
+    marginRight: 5,
+  },
+  buttonIcon: {
+    marginLeft: 5,
   },
 });

@@ -9,6 +9,7 @@ import { fetchAllLists, fetchAllTodosForAllLists } from "../../../slices/todaSli
 import TodoMobileNav from "./LeftTodo/TodoMobileNav";
 import NavigationBar from "../../NavigationBar";
 import CenterTodo from "./CenterTodo/NewTodo";
+import MaskTodo from "./CenterTodo/MaskTodo";
 export default function ToDoContainer() {
   const dispatch = useDispatch();
   const { selectedList } = useSelector((state) => state.todos);
@@ -28,7 +29,8 @@ export default function ToDoContainer() {
       <View style={{ flex: 1, flexDirection: "row" }}>
         {/* {wrapper === "compact-wrapper" ? "" : <LeftTodo />} */}
         {/* <LeftTodo /> */}
-        <CenterTodo />
+        {/* <CenterTodo /> */}
+        <MaskTodo />
         {/* <RightTodo /> */}
       </View>
     </View>
